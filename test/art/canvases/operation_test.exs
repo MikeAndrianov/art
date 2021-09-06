@@ -1,6 +1,6 @@
 defmodule Art.Canvases.OperationTest do
   use ExUnit.Case
-  # doctest Art
+  doctest Art.Canvases.Operation
 
   alias Art.Canvases.Operation
   alias Art.Canvases.Operations.{FloodFill, Rectangle}

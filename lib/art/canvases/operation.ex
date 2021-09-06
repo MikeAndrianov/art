@@ -1,7 +1,47 @@
 defmodule Art.Canvases.Operation do
+  @moduledoc ~S"""
+  Operation module is an entry point for creation different operations such as
+  Rectangle or FloodFill.
+  """
+
   alias Art.Canvases.Operations.{FloodFill, Rectangle}
 
-  # TODO: rename
+  @operation_regex ~r/(?<operation_type>.+)\s+at\s+\[(?<upper_left_x>\d+),\s*(?<upper_left_y>\d+)\]\s+with\s+(?<params>.*)/
+
+  @doc """
+  Recieves string, parses it and builds corresponding struct or return error
+
+  ## Examples
+
+      iex> operation = "Rectangle at [1, 1] with width 3, height 2, outline character: none, fill: ."
+      iex> Art.Canvases.Operation.build(operation)
+      {
+        :ok,
+        %Art.Canvases.Operations.Rectangle{
+          start_coordinates: [1, 1],
+          width: 3,
+          height: 2,
+          outline_character: nil,
+          fill: ".",
+          id: nil
+        }
+      }
+
+      iex> operation = "Flood fill at [2, 3] with fill character *"
+      iex> Art.Canvases.Operation.build(operation)
+      {
+        :ok,
+        %Art.Canvases.Operations.FloodFill{
+          start_coordinates: [2, 3],
+          fill_character: "*",
+          id: nil
+        }
+      }
+
+      iex> Art.Canvases.Operation.build("random string")
+      {:error, "Operation type is not valid"}
+
+  """
   def build(operation_string) do
     case attrs = parse(operation_string) do
       %{operation_type: "Rectangle"} ->
@@ -19,10 +59,7 @@ defmodule Art.Canvases.Operation do
   end
 
   defp parse(operation) do
-    regex =
-      ~r/(?<operation_type>.+)\s+at\s+\[(?<upper_left_x>\d+),\s*(?<upper_left_y>\d+)\]\s+with\s+(?<params>.*)/
-
-    regex
+    @operation_regex
     |> Regex.named_captures(operation)
     |> parse_params
     |> Enum.into(%{}, fn {k, v} -> {String.to_atom(k), v} end)
@@ -53,4 +90,6 @@ defmodule Art.Canvases.Operation do
     |> Map.drop(["upper_left_x", "upper_left_y"])
     |> Map.merge(parsed_params)
   end
+
+  defp parse_params(nil), do: %{}
 end
