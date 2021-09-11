@@ -6,10 +6,10 @@ defmodule Art.Canvases.Operation do
 
   alias Art.Canvases.Operations.{FloodFill, Rectangle}
 
-  @operation_regex ~r/(?<operation_type>.+)\s+at\s+\[(?<upper_left_x>\d+),\s*(?<upper_left_y>\d+)\]\s+with\s+(?<params>.*)/
+  @operation_regex ~r/(?<operation_type>.+)\s+at\s+\[(?<upper_left_row>\d+),\s*(?<upper_left_column>\d+)\]\s+with\s+(?<params>.*)/
 
   @doc """
-  Recieves string, parses it and builds corresponding struct or return error
+  Recieves string, parses it and builds corresponding struct or returns error
 
   ## Examples
 
@@ -55,6 +55,32 @@ defmodule Art.Canvases.Operation do
     end
   end
 
+  @doc """
+  Recieves rectangle and builds list of points
+
+  ## Examples
+
+      iex> operation = "Rectangle at [1, 1] with width 3, height 3, outline character: ., fill: none"
+      iex> {:ok, rectangle} = Art.Canvases.Operation.build(operation)
+      iex> Art.Canvases.Operation.execute(rectangle)
+      [
+        %Art.Canvases.Operations.Point{column: 1, content: ".", row: 1},
+        %Art.Canvases.Operations.Point{column: 1, content: ".", row: 3},
+        %Art.Canvases.Operations.Point{column: 2, content: ".", row: 1},
+        %Art.Canvases.Operations.Point{column: 2, content: ".", row: 3},
+        %Art.Canvases.Operations.Point{column: 3, content: ".", row: 1},
+        %Art.Canvases.Operations.Point{column: 3, content: ".", row: 3},
+        %Art.Canvases.Operations.Point{column: 1, content: ".", row: 2},
+        %Art.Canvases.Operations.Point{column: 3, content: ".", row: 2}
+      ]
+  """
+  def execute(%Rectangle{} = rectangle) do
+    Rectangle.build_points(rectangle)
+  end
+
+  def execute(_) do
+  end
+
   defp parse("") do
   end
 
@@ -69,7 +95,6 @@ defmodule Art.Canvases.Operation do
   defp parse_params(%{"params" => params} = attrs) do
     parsed_params =
       params
-      # todo: check for multiple whitespaces
       |> String.split([", ", ","], trim: true)
       |> Enum.into(
         %{},
@@ -86,8 +111,8 @@ defmodule Art.Canvases.Operation do
       )
 
     attrs
-    |> Map.put("start_coordinates", [attrs["upper_left_x"], attrs["upper_left_y"]])
-    |> Map.drop(["upper_left_x", "upper_left_y"])
+    |> Map.put("start_coordinates", [attrs["upper_left_row"], attrs["upper_left_column"]])
+    |> Map.drop(["upper_left_row", "upper_left_column"])
     |> Map.merge(parsed_params)
   end
 

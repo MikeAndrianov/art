@@ -26,7 +26,7 @@ defmodule Art.Canvases.Operations.FloodFillTest do
         fill_character: "-+"
       }
 
-      assert {:error, changeset} = FloodFill.build(%{})
+      assert {:error, changeset} = FloodFill.build(attrs)
       refute changeset.valid?
       assert Keyword.has_key?(changeset.errors, :fill_character)
     end
