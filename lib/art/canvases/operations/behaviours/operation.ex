@@ -7,5 +7,5 @@ defmodule Art.Canvases.Operations.Behaviours.Operation do
   @doc """
   Builds a list of points with character.
   """
-  @callback build_points(map) :: [struct]
+  @callback build_points(map, list, map) :: [struct]
 end

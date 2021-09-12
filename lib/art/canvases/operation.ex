@@ -62,7 +62,7 @@ defmodule Art.Canvases.Operation do
 
       iex> operation = "Rectangle at [1, 1] with width 3, height 3, outline character: ., fill: none"
       iex> {:ok, rectangle} = Art.Canvases.Operation.build(operation)
-      iex> Art.Canvases.Operation.execute(rectangle)
+      iex> Art.Canvases.Operation.execute(rectangle, [], %{})
       [
         %Art.Canvases.Operations.Point{column: 1, content: ".", row: 1},
         %Art.Canvases.Operations.Point{column: 1, content: ".", row: 3},
@@ -74,11 +74,14 @@ defmodule Art.Canvases.Operation do
         %Art.Canvases.Operations.Point{column: 3, content: ".", row: 2}
       ]
   """
-  def execute(%Rectangle{} = rectangle) do
+  def execute(%Rectangle{} = rectangle, _, _) do
     Rectangle.build_points(rectangle)
   end
 
-  def execute(_) do
+  def execute(%FloodFill{} = flood_fill, existing_points, canvas_size) do
+    FloodFill.build_points(flood_fill, existing_points, canvas_size)
+  end
+  def execute(_, _, _) do
   end
 
   defp parse("") do

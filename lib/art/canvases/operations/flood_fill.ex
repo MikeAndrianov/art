@@ -1,7 +1,7 @@
 defmodule Art.Canvases.Operations.FloodFill do
   use Ecto.Schema
   import Ecto.Changeset
-  alias Art.Canvases.Operations.Behaviours
+  alias Art.Canvases.Operations.{Behaviours, Point}
 
   @behaviour Behaviours.Operation
 
@@ -23,6 +23,30 @@ defmodule Art.Canvases.Operations.FloodFill do
       {:ok, apply_changes(changeset)}
     else
       {:error, changeset}
+    end
+  end
+
+  def build_points(flood_fill, canvas_size, existing_points \\ []) do
+    fill(existing_points, flood_fill.start_coordinates, flood_fill.fill_character, canvas_size)
+  end
+
+  defp fill(existing_points, coordinate, character, canvas_size) do
+    [col, row] = coordinate
+
+    cond do
+      col > canvas_size.width - 1 || col < 0 || row > canvas_size.height - 1 || row < 0 ->
+        existing_points
+      Enum.any?(existing_points, &(&1.column == col && &1.row == row)) ->
+        existing_points
+      true ->
+        point = %Point{column: col, row: row, content: character}
+        points = [point | existing_points]
+
+        points
+        |> fill([col + 1, row], character, canvas_size)
+        |> fill([col - 1, row], character, canvas_size)
+        |> fill([col, row + 1], character, canvas_size)
+        |> fill([col, row - 1], character, canvas_size)
     end
   end
 end
