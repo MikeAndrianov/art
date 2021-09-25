@@ -56,7 +56,7 @@ defmodule Art.Canvases.Operation do
   end
 
   @doc """
-  Recieves rectangle and builds list of points
+  Recieves operation and builds list of points
 
   ## Examples
 
@@ -64,14 +64,24 @@ defmodule Art.Canvases.Operation do
       iex> {:ok, rectangle} = Art.Canvases.Operation.build(operation)
       iex> Art.Canvases.Operation.execute(rectangle, [], %{})
       [
-        %Art.Canvases.Operations.Point{column: 1, content: ".", row: 1},
-        %Art.Canvases.Operations.Point{column: 1, content: ".", row: 3},
-        %Art.Canvases.Operations.Point{column: 2, content: ".", row: 1},
-        %Art.Canvases.Operations.Point{column: 2, content: ".", row: 3},
-        %Art.Canvases.Operations.Point{column: 3, content: ".", row: 1},
-        %Art.Canvases.Operations.Point{column: 3, content: ".", row: 3},
-        %Art.Canvases.Operations.Point{column: 1, content: ".", row: 2},
-        %Art.Canvases.Operations.Point{column: 3, content: ".", row: 2}
+        %Art.Canvases.Operations.Point{column: 1, row: 1, content: "."},
+        %Art.Canvases.Operations.Point{column: 1, row: 3, content: "."},
+        %Art.Canvases.Operations.Point{column: 2, row: 1, content: "."},
+        %Art.Canvases.Operations.Point{column: 2, row: 3, content: "."},
+        %Art.Canvases.Operations.Point{column: 3, row: 1, content: "."},
+        %Art.Canvases.Operations.Point{column: 3, row: 3, content: "."},
+        %Art.Canvases.Operations.Point{column: 1, row: 2, content: "."},
+        %Art.Canvases.Operations.Point{column: 3, row: 2, content: "."}
+      ]
+
+      iex> operation = "Flood fill at [0, 0] with fill character -"
+      iex> {:ok, flood_fill} = Art.Canvases.Operation.build(operation)
+      iex> Art.Canvases.Operation.execute(flood_fill, [], %{"width" => 2, "height" => 2})
+      [
+        %Art.Canvases.Operations.Point{column: 0, row: 1, content: "-"},
+        %Art.Canvases.Operations.Point{column: 1, row: 1, content: "-"},
+        %Art.Canvases.Operations.Point{column: 1, row: 0, content: "-"},
+        %Art.Canvases.Operations.Point{column: 0, row: 0, content: "-"}
       ]
   """
   def execute(%Rectangle{} = rectangle, _, _) do
@@ -79,8 +89,9 @@ defmodule Art.Canvases.Operation do
   end
 
   def execute(%FloodFill{} = flood_fill, existing_points, canvas_size) do
-    FloodFill.build_points(flood_fill, existing_points, canvas_size)
+    FloodFill.build_points(flood_fill, canvas_size, existing_points)
   end
+
   def execute(_, _, _) do
   end
 
@@ -91,7 +102,7 @@ defmodule Art.Canvases.Operation do
     @operation_regex
     |> Regex.named_captures(operation)
     |> parse_params
-    |> Enum.into(%{}, fn {k, v} -> {String.to_atom(k), v} end)
+    |> Enum.into(%{}, fn {k, v} -> {String.to_existing_atom(k), v} end)
     |> Map.delete(:params)
   end
 

@@ -44,7 +44,7 @@ defmodule Art.Canvases.Operations.FloodFillTest do
         }
         |> Rectangle.build_points()
 
-      canvas_size = %{height: 5, width: 5}
+      canvas_size = %{"height" => 5, "width" => 5}
       flood_fill = %FloodFill{start_coordinates: [4, 4], fill_character: "@"}
 
       points = FloodFill.build_points(flood_fill, canvas_size, existing_points)

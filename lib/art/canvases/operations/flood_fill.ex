@@ -18,7 +18,6 @@ defmodule Art.Canvases.Operations.FloodFill do
       |> validate_required([:start_coordinates, :fill_character])
       |> validate_length(:fill_character, is: 1)
 
-
     if changeset.valid? do
       {:ok, apply_changes(changeset)}
     else
@@ -34,10 +33,12 @@ defmodule Art.Canvases.Operations.FloodFill do
     [col, row] = coordinate
 
     cond do
-      col > canvas_size.width - 1 || col < 0 || row > canvas_size.height - 1 || row < 0 ->
+      col > canvas_size["width"] - 1 || col < 0 || row > canvas_size["height"] - 1 || row < 0 ->
         existing_points
+
       Enum.any?(existing_points, &(&1.column == col && &1.row == row)) ->
         existing_points
+
       true ->
         point = %Point{column: col, row: row, content: character}
         points = [point | existing_points]

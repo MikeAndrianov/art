@@ -84,7 +84,7 @@ defmodule Art.Canvases.Operations.Rectangle do
   end
 
   defp build_outline_points(starting_coordinate, width, height, character)
-      when width > 2 and height > 2 do
+       when width > 2 and height > 2 do
     [upper_left_col, upper_left_row] = starting_coordinate
     lower_right_col = upper_left_col + width - 1
     lower_right_row = upper_left_row + height - 1
@@ -103,7 +103,8 @@ defmodule Art.Canvases.Operations.Rectangle do
     horizontal_points ++ vertical_points
   end
 
-  defp build_outline_points(starting_coordinate, width, height, character) when width == 1 and height == 1 do
+  defp build_outline_points(starting_coordinate, width, height, character)
+       when width == 1 and height == 1 do
     [column, row] = starting_coordinate
 
     [%Point{column: column, row: row, content: character}]
