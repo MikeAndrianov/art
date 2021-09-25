@@ -1,0 +1,2 @@
+defmodule ArtWeb do
+end

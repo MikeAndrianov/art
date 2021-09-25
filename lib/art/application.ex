@@ -8,8 +8,7 @@ defmodule Art.Application do
   @impl true
   def start(_type, _args) do
     children = [
-      # Starts a worker by calling: Art.Worker.start_link(arg)
-      # {Art.Worker, arg}
+      {Plug.Cowboy, scheme: :http, plug: ArtWeb.Router}
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

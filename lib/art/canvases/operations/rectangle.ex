@@ -30,7 +30,6 @@ defmodule Art.Canvases.Operations.Rectangle do
     end
   end
 
-  @impl Behaviours.Operation
   def build_points(%__MODULE__{fill: nil} = rectangle) do
     build_outline_points(
       rectangle.start_coordinates,
