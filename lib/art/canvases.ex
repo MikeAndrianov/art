@@ -19,7 +19,7 @@ defmodule Art.Canvases do
   """
   def list_canvases() do
     from(c in Canvas, order_by: [desc: c.id])
-    |> Repo.all
+    |> Repo.all()
   end
 
   @doc """
@@ -50,7 +50,8 @@ defmodule Art.Canvases do
     end
   end
 
-  defp build_points(_file, %{"width" => width, "height" => height}) when width < 1 or height < 1 do
+  defp build_points(_file, %{"width" => width, "height" => height})
+       when width < 1 or height < 1 do
     {:error, "Invalid canvas size"}
   end
 

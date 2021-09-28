@@ -23,11 +23,11 @@ defmodule Art.Canvases.CanvasesTest do
       insert(:canvas)
       insert(:canvas)
 
-      assert length(Canvases.list_canvases) == 2
+      assert length(Canvases.list_canvases()) == 2
     end
 
     test "returns empty list unless canvases are present" do
-      assert Canvases.list_canvases == []
+      assert Canvases.list_canvases() == []
     end
   end
 

@@ -23,6 +23,4 @@ defmodule ArtWeb.RouterTest do
       assert conn.status == 200
     end
   end
-
-
 end
