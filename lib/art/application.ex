@@ -8,7 +8,8 @@ defmodule Art.Application do
   @impl true
   def start(_type, _args) do
     children = [
-      {Plug.Cowboy, scheme: :http, plug: ArtWeb.Router}
+      {Plug.Cowboy, scheme: :http, plug: ArtWeb.Router},
+      Art.Repo
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

@@ -102,7 +102,7 @@ defmodule Art.Canvases.Operation do
     @operation_regex
     |> Regex.named_captures(operation)
     |> parse_params
-    |> Enum.into(%{}, fn {k, v} -> {String.to_existing_atom(k), v} end)
+    |> Enum.into(%{}, fn {k, v} -> {String.to_atom(k), v} end)
     |> Map.delete(:params)
   end
 

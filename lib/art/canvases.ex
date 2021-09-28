@@ -3,57 +3,55 @@ defmodule Art.Canvases do
   The Canvases context.
   """
 
+  import Ecto.Query
+  alias Art.Repo
   alias Art.Canvases.{Canvas, Operation}
 
   @doc """
+  Finds and returns existing canvas by id
+  """
+  def get_canvas(id) do
+    Repo.get(Canvas, id)
+  end
+
+  @doc """
   Returns the list of canvases.
-
-  ## Examples
-
-      iex> list_canvases()
-      [%Art.Canvases.Canvas{}, ...]
-
   """
   def list_canvases() do
+    from(c in Canvas, order_by: [desc: c.id])
+    |> Repo.all
   end
 
   @doc """
   Creates canvas or returns error.
-
-  ## Examples
-
-      iex> create_canvas(file, canvas_size)
-      {:ok, %Art.Canvases.Canvas{}}
-
-      iex> create_canvas(file, canvas_size)
-      {:error, "error message"}
-
   """
   def create_canvas(file, canvas_size) do
+    save_canvas(%Canvas{}, file, canvas_size)
+  end
+
+  @doc """
+  Updates canvas or returns error.
+  """
+  def update_canvas(canvas, file, canvas_size) do
+    save_canvas(canvas, file, canvas_size)
+  end
+
+  defp save_canvas(canvas, file, canvas_size) do
     case build_points(file, canvas_size) do
       {:error, _} = error ->
         error
 
       points ->
-        Canvas.build(points, canvas_size)
+        attrs = Map.put(canvas_size, "points", points)
+
+        canvas
+        |> Canvas.changeset(attrs)
+        |> Repo.insert_or_update()
     end
   end
 
-  def draw_canvas(canvas), do: Canvas.draw(canvas)
-
- @doc """
-  Updates canvas or returns error.
-
-  ## Examples
-
-      iex> update_canvas()
-      {:ok, %Art.Canvases.Canvas{}}
-
-      iex> update_canvas()
-      {:error, "error message"}
-
-  """
-  def update_canvas() do
+  defp build_points(_file, %{"width" => width, "height" => height}) when width < 1 or height < 1 do
+    {:error, "Invalid canvas size"}
   end
 
   defp build_points(file, canvas_size) do
@@ -65,7 +63,6 @@ defmodule Art.Canvases do
           {:ok, operation} ->
             Operation.execute(operation, existing_points, canvas_size)
 
-          # TODO: replace this with real errors from Operation.build
           {:error, _error} ->
             throw("Operation is not valid: \"#{operation_string}\"")
         end
