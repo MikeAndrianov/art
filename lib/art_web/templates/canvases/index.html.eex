@@ -1,0 +1,10 @@
+<body>
+  <h2>Canvases</h2>
+
+  <%= for canvas <- canvases do %>
+    <h3>ID: <%= canvas.id %></h3>
+    <pre><%= canvas.content %></pre>
+    <hr/>
+  <% end %>
+
+</body>
