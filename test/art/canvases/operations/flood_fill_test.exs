@@ -49,32 +49,32 @@ defmodule Art.Canvases.Operations.FloodFillTest do
 
       points = FloodFill.build_points(flood_fill, canvas_size, existing_points)
 
-      assert points == [
-               %Point{column: 4, content: "@", row: 3},
-               %Point{column: 4, content: "@", row: 2},
-               %Point{column: 4, content: "@", row: 1},
-               %Point{column: 4, content: "@", row: 0},
-               %Point{column: 3, content: "@", row: 0},
-               %Point{column: 2, content: "@", row: 0},
-               %Point{column: 1, content: "@", row: 0},
-               %Point{column: 0, content: "@", row: 0},
-               %Point{column: 0, content: "@", row: 1},
-               %Point{column: 0, content: "@", row: 2},
-               %Point{column: 0, content: "@", row: 3},
-               %Point{column: 0, content: "@", row: 4},
-               %Point{column: 1, content: "@", row: 4},
-               %Point{column: 2, content: "@", row: 4},
-               %Point{column: 3, content: "@", row: 4},
-               %Point{column: 4, content: "@", row: 4},
-               %Point{column: 1, content: ".", row: 1},
-               %Point{column: 1, content: ".", row: 3},
-               %Point{column: 2, content: ".", row: 1},
-               %Point{column: 2, content: ".", row: 3},
-               %Point{column: 3, content: ".", row: 1},
-               %Point{column: 3, content: ".", row: 3},
-               %Point{column: 1, content: ".", row: 2},
-               %Point{column: 3, content: ".", row: 2}
-             ]
+      assert points == %{
+               {0, 0} => %Art.Canvases.Operations.Point{column: 0, content: "@", row: 0},
+               {0, 1} => %Art.Canvases.Operations.Point{column: 0, content: "@", row: 1},
+               {0, 2} => %Art.Canvases.Operations.Point{column: 0, content: "@", row: 2},
+               {0, 3} => %Art.Canvases.Operations.Point{column: 0, content: "@", row: 3},
+               {0, 4} => %Art.Canvases.Operations.Point{column: 0, content: "@", row: 4},
+               {1, 0} => %Art.Canvases.Operations.Point{column: 1, content: "@", row: 0},
+               {1, 1} => %Art.Canvases.Operations.Point{column: 1, content: ".", row: 1},
+               {1, 2} => %Art.Canvases.Operations.Point{column: 1, content: ".", row: 2},
+               {1, 3} => %Art.Canvases.Operations.Point{column: 1, content: ".", row: 3},
+               {1, 4} => %Art.Canvases.Operations.Point{column: 1, content: "@", row: 4},
+               {2, 0} => %Art.Canvases.Operations.Point{column: 2, content: "@", row: 0},
+               {2, 1} => %Art.Canvases.Operations.Point{column: 2, content: ".", row: 1},
+               {2, 3} => %Art.Canvases.Operations.Point{column: 2, content: ".", row: 3},
+               {2, 4} => %Art.Canvases.Operations.Point{column: 2, content: "@", row: 4},
+               {3, 0} => %Art.Canvases.Operations.Point{column: 3, content: "@", row: 0},
+               {3, 1} => %Art.Canvases.Operations.Point{column: 3, content: ".", row: 1},
+               {3, 2} => %Art.Canvases.Operations.Point{column: 3, content: ".", row: 2},
+               {3, 3} => %Art.Canvases.Operations.Point{column: 3, content: ".", row: 3},
+               {3, 4} => %Art.Canvases.Operations.Point{column: 3, content: "@", row: 4},
+               {4, 0} => %Art.Canvases.Operations.Point{column: 4, content: "@", row: 0},
+               {4, 1} => %Art.Canvases.Operations.Point{column: 4, content: "@", row: 1},
+               {4, 2} => %Art.Canvases.Operations.Point{column: 4, content: "@", row: 2},
+               {4, 3} => %Art.Canvases.Operations.Point{column: 4, content: "@", row: 3},
+               {4, 4} => %Art.Canvases.Operations.Point{column: 4, content: "@", row: 4}
+             }
     end
   end
 end

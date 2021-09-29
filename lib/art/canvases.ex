@@ -59,18 +59,28 @@ defmodule Art.Canvases do
     try do
       file.path
       |> File.stream!()
-      |> Stream.scan([], fn operation_string, existing_points ->
+      |> Enum.scan(%{}, fn operation_string, existing_points ->
         case Operation.build(operation_string) do
           {:ok, operation} ->
-            Operation.execute(operation, existing_points, canvas_size)
+            build_points_for_operation(existing_points, operation, canvas_size)
 
           {:error, _error} ->
             throw("Operation is not valid: \"#{operation_string}\"")
         end
       end)
-      |> Enum.flat_map(& &1)
+      |> Enum.reduce(%{}, fn operation_points, res -> Map.merge(res, operation_points) end)
+      |> Map.values()
     catch
       error -> {:error, error}
     end
+  end
+
+  def build_points_for_operation(existing_points, operation, canvas_size) do
+    operation
+    |> Operation.execute(existing_points, canvas_size)
+    |> Enum.reduce(
+      existing_points,
+      fn {_, point}, res -> Map.put(res, {point.column, point.row}, point) end
+    )
   end
 end

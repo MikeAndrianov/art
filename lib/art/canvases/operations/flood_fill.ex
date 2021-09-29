@@ -25,7 +25,7 @@ defmodule Art.Canvases.Operations.FloodFill do
     end
   end
 
-  def build_points(flood_fill, canvas_size, existing_points \\ []) do
+  def build_points(flood_fill, canvas_size, existing_points \\ %{}) do
     fill(existing_points, flood_fill.start_coordinates, flood_fill.fill_character, canvas_size)
   end
 
@@ -36,14 +36,14 @@ defmodule Art.Canvases.Operations.FloodFill do
       col > canvas_size["width"] - 1 || col < 0 || row > canvas_size["height"] - 1 || row < 0 ->
         existing_points
 
-      Enum.any?(existing_points, &(&1.column == col && &1.row == row)) ->
+      existing_points[{col, row}] ->
         existing_points
 
       true ->
         point = %Point{column: col, row: row, content: character}
-        points = [point | existing_points]
 
-        points
+        existing_points
+        |> Map.put({col, row}, point)
         |> fill([col + 1, row], character, canvas_size)
         |> fill([col - 1, row], character, canvas_size)
         |> fill([col, row + 1], character, canvas_size)

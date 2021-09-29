@@ -99,17 +99,17 @@ defmodule Art.Canvases.Operations.RectangleTest do
 
       points = Rectangle.build_points(rectangle)
 
-      assert points == [
-               %Point{column: 1, content: ".", row: 1},
-               %Point{column: 1, content: ".", row: 3},
-               %Point{column: 2, content: ".", row: 1},
-               %Point{column: 2, content: ".", row: 3},
-               %Point{column: 3, content: ".", row: 1},
-               %Point{column: 3, content: ".", row: 3},
-               %Point{column: 1, content: ".", row: 2},
-               %Point{column: 3, content: ".", row: 2},
-               %Point{column: 2, content: ".", row: 2}
-             ]
+      assert points == %{
+               {1, 1} => %Point{column: 1, content: ".", row: 1},
+               {1, 2} => %Point{column: 1, content: ".", row: 2},
+               {1, 3} => %Point{column: 1, content: ".", row: 3},
+               {2, 1} => %Point{column: 2, content: ".", row: 1},
+               {2, 2} => %Point{column: 2, content: ".", row: 2},
+               {2, 3} => %Point{column: 2, content: ".", row: 3},
+               {3, 1} => %Point{column: 3, content: ".", row: 1},
+               {3, 2} => %Point{column: 3, content: ".", row: 2},
+               {3, 3} => %Point{column: 3, content: ".", row: 3}
+             }
     end
 
     test "returns points with outline and fill characters" do
@@ -124,17 +124,17 @@ defmodule Art.Canvases.Operations.RectangleTest do
 
       points = Rectangle.build_points(rectangle)
 
-      assert points == [
-               %Point{column: 1, content: "@", row: 1},
-               %Point{column: 1, content: "@", row: 3},
-               %Point{column: 2, content: "@", row: 1},
-               %Point{column: 2, content: "@", row: 3},
-               %Point{column: 3, content: "@", row: 1},
-               %Point{column: 3, content: "@", row: 3},
-               %Point{column: 1, content: "@", row: 2},
-               %Point{column: 3, content: "@", row: 2},
-               %Point{column: 2, content: ".", row: 2}
-             ]
+      assert points == %{
+               {1, 1} => %Point{column: 1, content: "@", row: 1},
+               {1, 3} => %Point{column: 1, content: "@", row: 3},
+               {2, 1} => %Point{column: 2, content: "@", row: 1},
+               {2, 3} => %Point{column: 2, content: "@", row: 3},
+               {3, 1} => %Point{column: 3, content: "@", row: 1},
+               {3, 3} => %Point{column: 3, content: "@", row: 3},
+               {1, 2} => %Point{column: 1, content: "@", row: 2},
+               {3, 2} => %Point{column: 3, content: "@", row: 2},
+               {2, 2} => %Point{column: 2, content: ".", row: 2}
+             }
     end
 
     test "returns points for narrow rectangle" do
@@ -149,14 +149,14 @@ defmodule Art.Canvases.Operations.RectangleTest do
 
       points = Rectangle.build_points(rectangle)
 
-      assert points == [
-               %Point{column: 1, content: ".", row: 1},
-               %Point{column: 1, content: ".", row: 2},
-               %Point{column: 2, content: ".", row: 1},
-               %Point{column: 2, content: ".", row: 2},
-               %Point{column: 3, content: ".", row: 1},
-               %Point{column: 3, content: ".", row: 2}
-             ]
+      assert points == %{
+               {1, 1} => %Point{column: 1, content: ".", row: 1},
+               {1, 2} => %Point{column: 1, content: ".", row: 2},
+               {2, 1} => %Point{column: 2, content: ".", row: 1},
+               {2, 2} => %Point{column: 2, content: ".", row: 2},
+               {3, 1} => %Point{column: 3, content: ".", row: 1},
+               {3, 2} => %Point{column: 3, content: ".", row: 2}
+             }
     end
   end
 end

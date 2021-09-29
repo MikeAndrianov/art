@@ -33,11 +33,11 @@ defmodule ArtWeb.ApiRouterTest do
         "                                \n" <>
           "                                \n" <>
           "   @@@@@                        \n" <>
-          "   @   @  XXXXXXXXXXXXXX        \n" <>
-          "   @@@@@  X            X        \n" <>
-          "          X            X        \n" <>
-          "          X            X        \n" <>
-          "          X            X        \n" <>
+          "   @XXX@  XXXXXXXXXXXXXX        \n" <>
+          "   @@@@@  XOOOOOOOOOOOOX        \n" <>
+          "          XOOOOOOOOOOOOX        \n" <>
+          "          XOOOOOOOOOOOOX        \n" <>
+          "          XOOOOOOOOOOOOX        \n" <>
           "          XXXXXXXXXXXXXX        \n" <>
           "                                \n" <>
           "                                \n" <>

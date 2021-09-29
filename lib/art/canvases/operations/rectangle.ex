@@ -51,23 +51,28 @@ defmodule Art.Canvases.Operations.Rectangle do
   def build_points(%__MODULE__{} = rectangle) do
     [col, row] = rectangle.start_coordinates
 
-    build_outline_points(
-      rectangle.start_coordinates,
-      rectangle.width,
-      rectangle.height,
-      rectangle.outline_character
-    ) ++
+    outline_points =
+      build_outline_points(
+        rectangle.start_coordinates,
+        rectangle.width,
+        rectangle.height,
+        rectangle.outline_character
+      )
+
+    internal_points =
       build_internal_points(
         [col + 1, row + 1],
         rectangle.width - 2,
         rectangle.height - 2,
         rectangle.fill
       )
+
+    Map.merge(outline_points, internal_points)
   end
 
-  defp build_internal_points(starting_coordinate, width, height, character, res \\ []) do
+  defp build_internal_points(starting_coordinate, width, height, character, res \\ %{}) do
     [upper_left_col, upper_left_row] = starting_coordinate
-    res = res ++ build_outline_points(starting_coordinate, width, height, character)
+    res = Map.merge(res, build_outline_points(starting_coordinate, width, height, character))
 
     if width > 2 && height > 2 do
       build_internal_points(
@@ -89,31 +94,36 @@ defmodule Art.Canvases.Operations.Rectangle do
     lower_right_row = upper_left_row + height - 1
 
     horizontal_points =
-      for column <- upper_left_col..lower_right_col, row <- [upper_left_row, lower_right_row] do
-        %Point{column: column, row: row, content: character}
+      for column <- upper_left_col..lower_right_col,
+          row <- [upper_left_row, lower_right_row],
+          reduce: %{} do
+        acc -> Map.put(acc, {column, row}, %Point{column: column, row: row, content: character})
       end
 
     vertical_points =
       for row <- (upper_left_row + 1)..(lower_right_row - 1),
-          column <- [upper_left_col, lower_right_col] do
-        %Point{column: column, row: row, content: character}
+          column <- [upper_left_col, lower_right_col],
+          reduce: %{} do
+        acc -> Map.put(acc, {column, row}, %Point{column: column, row: row, content: character})
       end
 
-    horizontal_points ++ vertical_points
+    Map.merge(horizontal_points, vertical_points)
   end
 
   defp build_outline_points(starting_coordinate, width, height, character)
        when width == 1 and height == 1 do
     [column, row] = starting_coordinate
 
-    [%Point{column: column, row: row, content: character}]
+    %{
+      {column, row} => %Point{column: column, row: row, content: character}
+    }
   end
 
   defp build_outline_points(starting_coordinate, width, height, character) do
     [x, y] = starting_coordinate
 
-    for column <- x..(x + width - 1), row <- [y, y + height - 1] do
-      %Point{column: column, row: row, content: character}
+    for column <- x..(x + width - 1), row <- [y, y + height - 1], reduce: %{} do
+      acc -> Map.put(acc, {column, row}, %Point{column: column, row: row, content: character})
     end
   end
 

@@ -1,2 +1,2 @@
 Circle at [3,2] with width: 5, height: 3, outline character: @, fill character: X
-Rectangle at [10, 3] with width: 14, height: 6, outline character: X, fill character: O
+Rectangle at [10, 3] with width: 14, height: 6, outline character: X, fill: O

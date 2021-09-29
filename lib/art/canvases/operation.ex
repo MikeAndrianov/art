@@ -62,27 +62,28 @@ defmodule Art.Canvases.Operation do
 
       iex> operation = "Rectangle at [1, 1] with width 3, height 3, outline character: ., fill: none"
       iex> {:ok, rectangle} = Art.Canvases.Operation.build(operation)
-      iex> Art.Canvases.Operation.execute(rectangle, [], %{})
-      [
-        %Art.Canvases.Operations.Point{column: 1, row: 1, content: "."},
-        %Art.Canvases.Operations.Point{column: 1, row: 3, content: "."},
-        %Art.Canvases.Operations.Point{column: 2, row: 1, content: "."},
-        %Art.Canvases.Operations.Point{column: 2, row: 3, content: "."},
-        %Art.Canvases.Operations.Point{column: 3, row: 1, content: "."},
-        %Art.Canvases.Operations.Point{column: 3, row: 3, content: "."},
-        %Art.Canvases.Operations.Point{column: 1, row: 2, content: "."},
-        %Art.Canvases.Operations.Point{column: 3, row: 2, content: "."}
-      ]
+      iex> Art.Canvases.Operation.execute(rectangle, %{}, %{})
+      %{
+        {1, 1} => %Art.Canvases.Operations.Point{column: 1, content: ".", row: 1},
+        {1, 2} => %Art.Canvases.Operations.Point{column: 1, content: ".", row: 2},
+        {1, 3} => %Art.Canvases.Operations.Point{column: 1, content: ".", row: 3},
+        {2, 1} => %Art.Canvases.Operations.Point{column: 2, content: ".", row: 1},
+        {2, 3} => %Art.Canvases.Operations.Point{column: 2, content: ".", row: 3},
+        {3, 1} => %Art.Canvases.Operations.Point{column: 3, content: ".", row: 1},
+        {3, 2} => %Art.Canvases.Operations.Point{column: 3, content: ".", row: 2},
+        {3, 3} => %Art.Canvases.Operations.Point{column: 3, content: ".", row: 3}
+      }
+
 
       iex> operation = "Flood fill at [0, 0] with fill character -"
       iex> {:ok, flood_fill} = Art.Canvases.Operation.build(operation)
-      iex> Art.Canvases.Operation.execute(flood_fill, [], %{"width" => 2, "height" => 2})
-      [
-        %Art.Canvases.Operations.Point{column: 0, row: 1, content: "-"},
-        %Art.Canvases.Operations.Point{column: 1, row: 1, content: "-"},
-        %Art.Canvases.Operations.Point{column: 1, row: 0, content: "-"},
-        %Art.Canvases.Operations.Point{column: 0, row: 0, content: "-"}
-      ]
+      iex> Art.Canvases.Operation.execute(flood_fill, %{}, %{"width" => 2, "height" => 2})
+      %{
+        {0, 0} => %Art.Canvases.Operations.Point{column: 0, content: "-", row: 0},
+        {0, 1} => %Art.Canvases.Operations.Point{column: 0, content: "-", row: 1},
+        {1, 0} => %Art.Canvases.Operations.Point{column: 1, content: "-", row: 0},
+        {1, 1} => %Art.Canvases.Operations.Point{column: 1, content: "-", row: 1}
+      }
   """
   def execute(%Rectangle{} = rectangle, _, _) do
     Rectangle.build_points(rectangle)
