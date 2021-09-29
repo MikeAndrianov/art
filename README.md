@@ -8,8 +8,8 @@ Elixir application for representing ASCII art drawing canvas.
 2. Install PostgreSQL
 3. Run `cp .env.example .env` in the terminal and replace variables in the `.env` with real values.
 4. Run `mix deps.get`
-5. Run `mix ecto.create`
-6. Run `mix ecto.migrate`
+5. Run `source .env && mix ecto.create`
+6. Run `source .env && mix ecto.migrate`
 
 ## How to run the application
 
